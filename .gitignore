@@ -167,3 +167,4 @@ data/run*root
 temp_data/*.hdf5
 .vscode
 **/.vscode
+test*.ipynb
