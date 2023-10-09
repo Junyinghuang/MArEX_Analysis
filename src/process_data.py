@@ -33,7 +33,7 @@ def process_data(run_numbers, detector, output):
     amp = np.array([])
     norm = 0
     # L = 184.5
-    L = 183
+    L = 182.24
     if detector == "C6D6":
         L += 6.89
     for i in run_numbers:
