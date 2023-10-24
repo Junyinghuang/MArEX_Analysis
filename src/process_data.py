@@ -46,4 +46,5 @@ def process_data(run_numbers, detector, output):
     f.create_dataset("energy", data=en)
     f.create_dataset("amp", data=amp)
     f.create_dataset("norm", data=[norm])
+    f.create_dataset("tof", data=tof)
     f.close()
