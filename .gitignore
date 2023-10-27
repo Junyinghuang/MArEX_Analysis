@@ -168,3 +168,4 @@ temp_data/*.hdf5
 .vscode
 **/.vscode
 test*.ipynb
+**/__pycache__
