@@ -169,3 +169,4 @@ temp_data/*.hdf5
 **/.vscode
 test*.ipynb
 **/__pycache__
+data/compressed/*.hdf5
