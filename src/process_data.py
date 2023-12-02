@@ -24,7 +24,7 @@ def get_data(run_number, detector, L):
             norm += PI[i]
     real_tof = np.zeros(len(tof))
     for i in range(len(tof)):
-        real_tof[i] = tof[i] - (PKUP_tflash[BN[i] - 1] - 660 - L / 299792458)
+        real_tof[i] = tof[i] - (PKUP_tflash[BN[i] - 1] - 660 - L * 1e9 / 299792458)
     return real_tof, amp, norm
 
 

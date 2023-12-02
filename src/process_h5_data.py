@@ -25,7 +25,7 @@ def get_data(run_number, detector, L):
     if detector == "FIMG":
         diff = 630
     for i in range(len(tof)):
-        real_tof[i] = tof[i] - (PKUP_tflash[BN[i] - 1] - diff - L / 299792458)
+        real_tof[i] = tof[i] - (PKUP_tflash[BN[i] - 1] - diff - L * 1e9 / 299792458)
     return real_tof, amp, norm
 
 
@@ -38,7 +38,7 @@ def process_data(run_numbers, detector, output):
     if detector == "C6D6":
         L += 6.89
     if detector == "FIGM":
-        L += 80
+        L += 0.8
     for i in run_numbers:
         tof_i, amp_i, norm_i = get_data(i, detector, L)
         tof = np.append(tof, tof_i)
@@ -51,3 +51,9 @@ def process_data(run_numbers, detector, output):
     f.create_dataset("norm", data=[norm])
     f.create_dataset("tof", data=tof)
     f.close()
+
+
+#pressure: 200 bar thickness:10 cm
+#mgas 117369 117386
+#80 cm from ptbc
+#630 nm tflash
