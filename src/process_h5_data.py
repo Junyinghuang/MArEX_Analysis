@@ -12,7 +12,7 @@ def get_data(run_number, detector, L):
     PKUP_tflash = PKUP['tflash'][:]
     # tflash = data['tflash'][:]
     tof = data['tof'][:]
-    # detn = data['detn'][:]
+    detn = data['detn'][:]
     BN = data['BunchNumber'][:]
     PI = data['PulseIntensity'][:]
     amp = data['amp'][:]
@@ -26,12 +26,13 @@ def get_data(run_number, detector, L):
         diff = 630
     for i in range(len(tof)):
         real_tof[i] = tof[i] - (PKUP_tflash[BN[i] - 1] - diff - L * 1e9 / 299792458)
-    return real_tof, amp, norm
+    return real_tof, amp, norm, detn
 
 
 def process_data(run_numbers, detector, output):
     tof = np.array([])
     amp = np.array([])
+    detn = np.array([])
     norm = 0
     # L = 184.5
     L = 182.24
@@ -40,9 +41,10 @@ def process_data(run_numbers, detector, output):
     if detector == "FIGM":
         L += 0.8
     for i in run_numbers:
-        tof_i, amp_i, norm_i = get_data(i, detector, L)
+        tof_i, amp_i, norm_i, detn_i = get_data(i, detector, L)
         tof = np.append(tof, tof_i)
         amp = np.append(amp, amp_i)
+        detn = np.append(detn, detn_i)
         norm += norm_i
     en = energy(tof / 1e9, L, 939.56542, 299792458) * 1e6  # eV
     f = h5py.File(output, "w")
@@ -50,6 +52,7 @@ def process_data(run_numbers, detector, output):
     f.create_dataset("amp", data=amp)
     f.create_dataset("norm", data=[norm])
     f.create_dataset("tof", data=tof)
+    f.create_dataset("detn", data=detn)
     f.close()
 
 
