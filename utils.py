@@ -1,4 +1,5 @@
 import numpy as np
+import h5py
 
 def search_asc(arr, target):
     left = 0
@@ -30,6 +31,20 @@ def xsec_to_ts(xsec, rho, d, m):
     return np.exp(-rho * d * xsec / m)
 def tof_to_energy(tof, x, m, c):
     return m * (1 / np.sqrt(1 - x * x / c / c / tof / tof) - 1)
+def tof_to_energy_dl(tof, x, m, c):
+    e = tof_to_energy(tof, x, m, c) * 1e6
+    f = h5py.File("data/rf_avg.h5py", "r")
+    dl_avg = f['dl_avg'][:]
+    dl_sig = f['dl_sig'][:]
+    idx = ((np.log10(e) + 3) * 100).astype(int)
+    dl = dl_avg[idx]
+    sig = dl_sig[idx]
+    dl250 = dl_avg[int((np.log10(250) + 3) * 100)]
+    e_mid = tof_to_energy(tof, x + dl - dl250, m, c)
+    e_long = tof_to_energy(tof, x + dl - dl250 + sig, m, c)
+    e_short = tof_to_energy(tof, x + dl - dl250 - sig, m, c)
+    return e_mid, e_long, e_short
+
 def energy_to_tof(energy, x, m, c):
     return x * (energy + m) / c / np.sqrt(energy ** 2 + 2 * energy * m)
 
